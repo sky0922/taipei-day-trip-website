@@ -17,4 +17,6 @@ def booking():
 def thankyou():
 	return render_template("thankyou.html")
 
+# 測試一下 GIT
+
 app.run(port=3000)
