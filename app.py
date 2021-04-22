@@ -51,7 +51,7 @@ def api_attraction(attractionId):
 
 		if selectDB != None:
 			#抓資料庫內圖片網址資料
-			selectURL = "select src from image where id = '%s'" %(attractionId)
+			selectURL = "select src from image where id = '%s'" %(selectDB["id"])
 			cursor.execute(selectURL)
 			imageURL = cursor.fetchall()
 
@@ -172,6 +172,7 @@ def attractions():
 				nextpage = int(page)+1
 			else:
 				nextpage = None
+				
 			return jsonify({"nextPage": nextpage, "data": data})
 
 	else:
