@@ -41,9 +41,11 @@ def thankyou():
 def api_attraction(attractionId):
 
 	#先確認資料是否為 0 以上的整數
+	#這邊是用 uid 來找景點，uid 是資料存入系統後自動產生的序號，id 則是原始 json 資料 _id 值
+	#兩個資料表的 id 欄位存的都是 _id 的值，所以用 id 欄位來對照就可以抓到對應圖片
 	if attractionId.isdigit():
 		connect_mysql()
-		selectsql = "select id, name, category, description, address, transport, mrt, latitude, longitude from tpelocation where id = '%s'"  %(attractionId)
+		selectsql = "select * from tpelocation where uid = '%s'"  %(attractionId)
 		cursor.execute(selectsql)
 		selectDB = cursor.fetchone()
 
@@ -60,7 +62,7 @@ def api_attraction(attractionId):
 
 			data = {
 					"data": {
-					"id": selectDB["id"],
+					"id": selectDB["uid"],
 					"name": selectDB["name"],
 					"category": selectDB["category"],
 					"description": selectDB["description"],
@@ -82,7 +84,6 @@ def api_attraction(attractionId):
 
 
 
-
 @app.route("/api/attractions")
 def attractions():
 
@@ -92,79 +93,90 @@ def attractions():
 
 	if page.isdigit():
 	
-		#無關鍵字，第 0 頁，直接篩出前面 12 筆
-		if keyword == None and page == "0":
+		#無關鍵字，有頁數，抓出資料庫對應資料
+		#若沒有下一頁，nextPage 會變成空值
+		if keyword == None:
 			connect_mysql()
-			selectsql = "select id, name, category, description, address, transport, mrt, latitude, longitude from tpelocation limit %d, %d" %(int(page), int(page)+11) 
+			selectsql = "select * from tpelocation limit %d, %d" %(int(page)*12, 12) 
 			cursor.execute(selectsql)
 			selectDB = cursor.fetchall()
 
-			for iiiii in selectDB:				
-				selectURL = "select src from image where id = '%s'" %(iiiii["id"])
+			if selectDB == ():
+				return jsonify({"error": True, "message": "錯誤：該分頁已無資料"})
+
+			# count 這個變數主要是要計算 fetchall 出來數量是多少，如果少於 12 代表沒有下一頁
+			count = 0
+			for eachdata in selectDB:				
+				selectURL = "select src from image where id = '%s'" %(eachdata["id"])
 				cursor.execute(selectURL)
 				imageURL = cursor.fetchall()
 				
 				data.append(
 					{
-						"id": iiiii["id"],
-						"name": iiiii["name"],
-						"category": iiiii["category"],
-						"description": iiiii["description"],
-						"address": iiiii["address"],
-						"transport": iiiii["transport"],
-						"mrt": iiiii["mrt"],
-						"latitude": iiiii["latitude"],
-						"longitude": iiiii["longitude"],
+						"id": eachdata["uid"],
+						"name": eachdata["name"],
+						"category": eachdata["category"],
+						"description": eachdata["description"],
+						"address": eachdata["address"],
+						"transport": eachdata["transport"],
+						"mrt": eachdata["mrt"],
+						"latitude": eachdata["latitude"],
+						"longitude": eachdata["longitude"],
 						"images": ["http://"+i["src"] for i in imageURL]
 						}
 				)
+				count += 1
 
-			return jsonify({"nextPage": int(page)+1, "data": data})
+			if count > 11:
+				nextpage = int(page)+1
+			else:
+				nextpage = None
 
-		if keyword == None and page != "0":
+			return jsonify({"nextPage": nextpage, "data": data})
 
+		else:
 			connect_mysql()
-			selectsql = "select id, name, category, description, address, transport, mrt, latitude, longitude from tpelocation limit %d, %d" %(int(page)*12, int(page)*12+11) 
-			cursor.execute(selectsql)
-			selectDB = cursor.fetchall()
 
-			for iiiii in selectDB:				
-				selectURL = "select src from image where id = '%s'" %(iiiii["id"])
-				cursor.execute(selectURL)
-				imageURL = cursor.fetchall()
-				
-				data.append(
-					{
-						"id": iiiii["id"],
-						"name": iiiii["name"],
-						"category": iiiii["category"],
-						"description": iiiii["description"],
-						"address": iiiii["address"],
-						"transport": iiiii["transport"],
-						"mrt": iiiii["mrt"],
-						"latitude": iiiii["latitude"],
-						"longitude": iiiii["longitude"],
-						"images": ["http://"+i["src"] for i in imageURL]
-						}
-				)
-
-			return jsonify({"nextPage": int(page)+1, "data": data})
-
-		# 	return "無關鍵字，有頁數，篩出 12 筆資料"
+			#因為有 % 符號的關係，改用 format 方式寫 SQL 語法，搜尋景點名稱中只要有出線關鍵字就抓資料出來
+			selectsql = f"select * from tpelocation where name LIKE '%"+keyword+f"%' limit {int(page)*12}, 12"
 			
-		# if keyword != None and page == 0:
-		# 	return "keyword != None and page == 0"
+			cursor.execute(selectsql)
+			selectDB = cursor.fetchall()
+			print(selectsql, selectDB)
 
-		# if keyword != None and page != 0:
-		# 	return "keyword != None and page != 0"
+			if selectDB == ():
+				return jsonify({"error": True, "message": "錯誤：該頁已無結果或關鍵字沒有搜尋到結果"})
 
-		# lastitem = page * 12
-		# firstitem = lastitem - 11 
+			count = 0
+			for eachdata in selectDB:				
+				selectURL = "select src from image where id = '%s'" %(eachdata["id"])
+				cursor.execute(selectURL)
+				imageURL = cursor.fetchall()
+				
+				data.append(
+					{
+						"id": eachdata["uid"],
+						"name": eachdata["name"],
+						"category": eachdata["category"],
+						"description": eachdata["description"],
+						"address": eachdata["address"],
+						"transport": eachdata["transport"],
+						"mrt": eachdata["mrt"],
+						"latitude": eachdata["latitude"],
+						"longitude": eachdata["longitude"],
+						"images": ["http://"+i["src"] for i in imageURL]
+						}
+				)
+				count += 1
+
+			if count > 11:
+				nextpage = int(page)+1
+			else:
+				nextpage = None
+			return jsonify({"nextPage": nextpage, "data": data})
+
 	else:
 		return jsonify({"error": True, "message": "錯誤：頁數資料型態不正確"})
-
-
-
 
 
 @app.errorhandler(404)
@@ -176,4 +188,4 @@ def error404(error):
     return jsonify({"error": True, "message": "網站異常中..."})
 
 
-app.run(host="0.0.0.0", port=3000, debug=True)
+app.run(host="127.0.0.1", port=3000, debug=True)
