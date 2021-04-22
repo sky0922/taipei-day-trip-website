@@ -142,7 +142,6 @@ def attractions():
 			
 			cursor.execute(selectsql)
 			selectDB = cursor.fetchall()
-			print(selectsql, selectDB)
 
 			if selectDB == ():
 				return jsonify({"error": True, "message": "錯誤：該頁已無結果或關鍵字沒有搜尋到結果"})
