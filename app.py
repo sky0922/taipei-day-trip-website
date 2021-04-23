@@ -101,11 +101,13 @@ def attractions():
 			cursor.execute(selectsql)
 			selectDB = cursor.fetchall()
 
+			# count 這個變數主要是要計算 fetchall 出來數量是多少，如果少於 12 代表沒有下一頁
+			count = len(selectDB)
+
 			if selectDB == ():
 				return jsonify({"error": True, "message": "錯誤：該分頁已無資料"})
 
-			# count 這個變數主要是要計算 fetchall 出來數量是多少，如果少於 12 代表沒有下一頁
-			count = 0
+
 			for eachdata in selectDB:				
 				selectURL = "select src from image where id = '%s'" %(eachdata["id"])
 				cursor.execute(selectURL)
@@ -125,7 +127,6 @@ def attractions():
 						"images": ["http://"+i["src"] for i in imageURL]
 						}
 				)
-				count += 1
 
 			if count > 11:
 				nextpage = int(page)+1
@@ -142,11 +143,11 @@ def attractions():
 			
 			cursor.execute(selectsql)
 			selectDB = cursor.fetchall()
+			count = len(selectDB)
 
 			if selectDB == ():
 				return jsonify({"error": True, "message": "錯誤：該頁已無結果或關鍵字沒有搜尋到結果"})
 
-			count = 0
 			for eachdata in selectDB:				
 				selectURL = "select src from image where id = '%s'" %(eachdata["id"])
 				cursor.execute(selectURL)
@@ -166,13 +167,12 @@ def attractions():
 						"images": ["http://"+i["src"] for i in imageURL]
 						}
 				)
-				count += 1
 
 			if count > 11:
 				nextpage = int(page)+1
 			else:
 				nextpage = None
-				
+
 			return jsonify({"nextPage": nextpage, "data": data})
 
 	else:
