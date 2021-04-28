@@ -195,7 +195,9 @@
             background-size: 80%, cover;
 		}
 
-
+        .box{
+			width:90%;
+		}
 
 	}
 
@@ -207,17 +209,27 @@
 
 <script>
     
+
+
+    page = 0;
     // 創建元素
     function createMyElement(){
         let content = document.querySelector("#content"); 
-        let src = "api/attractions?page=0"
-
+        let keyword = document.getElementById("keyword").value;
+        let src = ""
+        if (keyword == "") {
+            src = "api/attractions?page="+String(page);
+        }
+        else {
+            src = "api/attractions?page="+String(page)+"&keyword="+String(keyword);
+        }
+        console.log(keyword, src);
         fetch(src) 
             .then(function(resp) {
             //console.log(resp);
                     resp.json().then(function(json) {
                     // console.log(json);
-                        let nextPage = json.nextPage
+                        let nextPage = json.nextPage;
                         let data = json.data; 
                         console.log(data);
                         // console.log(data[0]["images"][0]);
