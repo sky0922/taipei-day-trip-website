@@ -117,7 +117,6 @@
 		margin-right:auto;
 		margin-left:auto;
 		margin-top:15px;
-		text-align:center;
 		}
 
 	.box{
@@ -210,9 +209,9 @@
 <script>
     
 
-
+    // 先把頁數跟關鍵字都設定為全域變數
     page = 0;
-
+    keyword = "";
 
     // 創建元素
     function addElement(){
@@ -314,6 +313,8 @@
 
 <script>
 
+
+// 監測卷軸事件
 window.addEventListener("scroll",()=>{
 
     // document.documentElement.scrollHeight 整個網頁內容的長度
@@ -326,8 +327,7 @@ window.addEventListener("scroll",()=>{
     console.log(scrolled, scrollable, document.documentElement.scrollHeight, window.innerHeight);
 
     // Math.ceil() 取一個大於等於指定數字的最小整數。
-    if (Math.ceil(scrolled) === scrollable){
-        // alert("網頁到底部了");
+    if (Math.ceil(scrolled/2) === Math.ceil(scrollable/2)){
         if (page != null){
             addElement();
         }
