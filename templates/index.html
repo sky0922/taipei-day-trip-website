@@ -175,7 +175,7 @@
 			}
 
 		.box{
-			width:350px;
+			width:45%;
 
 		}
 
@@ -212,8 +212,10 @@
 
 
     page = 0;
+
+
     // 創建元素
-    function createMyElement(){
+    function addElement(){
         let content = document.querySelector("#content"); 
         let keyword = document.getElementById("keyword").value;
         let src = ""
@@ -229,7 +231,8 @@
             //console.log(resp);
                     resp.json().then(function(json) {
                     // console.log(json);
-                        let nextPage = json.nextPage;
+                        //注意這個關鍵變數 page，吃的是 json 內的下一頁，只會有頁數或者 null，null 代表沒有下一頁
+                        page = json.nextPage;
                         let data = json.data; 
                         console.log(data);
                         // console.log(data[0]["images"][0]);
@@ -277,7 +280,8 @@
 
 </head>
 
-<body>
+<body onload="addElement()">
+
 <div class="top">
     <div class="nav">
         <div class="left-nav"><a href="#">台北一日遊</a></div>
@@ -293,85 +297,14 @@
     <div class="top_info">
         <h1>輕鬆享受台北一日悠閒</h1>
         <p class="slogan">探索每個角落，體驗程式的深度旅遊行程</p>
-        <form id="search">
+        <form id="search" onsubmit="addElement()">
             <input class="input_search" type="text" placeholder="輸入景點名稱查詢" id="keyword">
             <button class="btn_search" type="submit" id="btn"></button></form>
     </div>
 </div>
 
 
-
-<body onload="createMyElement()">
-
 <div class="content" id="content">
-
-    <!--
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000979.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000735.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11003130.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000979.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000979.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000735.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11003130.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000979.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-
-    <div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000979.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000735.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11003130.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
-	<div class="box">
-		<img src="https://www.travel.taipei/d_upload_ttn/sceneadmin/pic/11000979.jpg" alt="">
-		<div class="title">Butterflies are flying...</div>
-        <div class="title2"><span>flying</span><span>flying</span></div>
-	</div>
--->
-
-
 
 </div>
 
@@ -379,6 +312,31 @@
 
 </body>
 
+<script>
+
+window.addEventListener("scroll",()=>{
+
+    // document.documentElement.scrollHeight 整個網頁內容的長度
+    // window.innerHeight 可視範圍
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+
+    // 卷軸捲動時，window.scrollY 會一直變化，到網頁底部的時候會是一個固定的數字，越往下拉越大
+    const scrolled = window.scrollY;
+
+    console.log(scrolled, scrollable, document.documentElement.scrollHeight, window.innerHeight);
+
+    // Math.ceil() 取一個大於等於指定數字的最小整數。
+    if (Math.ceil(scrolled) === scrollable){
+        // alert("網頁到底部了");
+        if (page != null){
+            addElement();
+        }
+       
+    }
+
+});
+
+</script>
 
 
 
