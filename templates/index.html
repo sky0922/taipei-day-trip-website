@@ -365,7 +365,8 @@ window.addEventListener("scroll",()=>{
 
     // Math.floor() 捨棄小數
     if (Math.ceil(scrolled) >= (scrollable-10)){
-        if (page != null){
+        console.log(Number.isFinite(page))
+        if (Number.isFinite(page)){
             // 加入一點延遲
             window.setTimeout(function(){
                 addElement();
