@@ -221,13 +221,21 @@
     ing = false;
 
     function search(){
-        document.getElementById('search').onsubmit = function() {
             page = 0;
             document.getElementById('content').innerHTML = '';
             addElement();
-            event.preventDefault();
-            }
+            return false;
     }
+
+    // button type 是 submit 時用的方式
+    // function search(){
+    //     document.getElementById('search').onsubmit = function() {
+    //         page = 0;
+    //         document.getElementById('content').innerHTML = '';
+    //         addElement();
+    //         event.preventDefault();
+    //         }
+    // }
 
     // 創建元素
     function addElement(){
@@ -333,9 +341,9 @@
     <div class="top_info">
         <h1>輕鬆享受台北一日悠閒</h1>
         <p class="slogan">探索每個角落，體驗程式的深度旅遊行程</p>
-        <form id="search" onsubmit="return false">
+        <form id="search" onsubmit="return search()">
             <input class="input_search" type="text" placeholder="輸入景點名稱查詢" id="keyword">
-            <button class="btn_search" type="submit" id="btn" onclick="search()"></button></form>
+            <button class="btn_search" type="button" id="btn" onclick="search()"></button></form>
     </div>
 </div>
 
