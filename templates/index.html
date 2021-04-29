@@ -170,6 +170,7 @@
 		.content{
 			/* background-color:yellow; */
 			width:90%;
+            text-align: center;
 			}
 
 		.box{
@@ -201,19 +202,24 @@
 
 
 
-
-
 </style>
 
 <script>
     
 
-    // 先把頁數跟關鍵字都設定為全域變數
+    // 把頁數及監控 fetch 運作的變數 ing 設定為全域變數
     page = 0;
-    keyword = "";
+    ing = false;
 
     // 創建元素
     function addElement(){
+        //如果是真，運作中，直接跳出函式，不進行 fetch 動作
+        if (ing){
+            return;
+        }
+
+        ing = true;
+
         let content = document.querySelector("#content"); 
         let keyword = document.getElementById("keyword").value;
         let src = ""
@@ -226,11 +232,13 @@
         console.log(keyword, src);
         fetch(src) 
             .then(function(resp) {
-            //console.log(resp);
+                //console.log(resp);
                     resp.json().then(function(json) {
                     // console.log(json);
                         //注意這個關鍵變數 page，吃的是 json 內的下一頁，只會有頁數或者 null，null 代表沒有下一頁
                         page = json.nextPage;
+                        ing = false;
+
                         let data = json.data; 
                         console.log(data);
                         // console.log(data[0]["images"][0]);
@@ -274,6 +282,7 @@
             });
     }
     
+
 </script>
 
 </head>
@@ -295,7 +304,7 @@
     <div class="top_info">
         <h1>輕鬆享受台北一日悠閒</h1>
         <p class="slogan">探索每個角落，體驗程式的深度旅遊行程</p>
-        <form id="search" onsubmit="addElement()">
+        <form id="search" onsubmit="event.preventDefault()">
             <input class="input_search" type="text" placeholder="輸入景點名稱查詢" id="keyword">
             <button class="btn_search" type="submit" id="btn"></button></form>
     </div>
@@ -310,8 +319,8 @@
 
 </body>
 
-<script>
 
+<script>
 
 // 監測卷軸事件
 window.addEventListener("scroll",()=>{
@@ -326,7 +335,7 @@ window.addEventListener("scroll",()=>{
     console.log(scrolled, scrollable, document.documentElement.scrollHeight, window.innerHeight);
 
     // Math.floor() 捨棄小數
-    if (Math.floor(scrolled) === Math.ceil(scrollable)){
+    if (Math.floor(scrolled) === scrollable){
         if (page != null){
             // 加入一點延遲
             window.setTimeout(function(){
