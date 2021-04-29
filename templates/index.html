@@ -7,10 +7,10 @@
 
 <style type="text/css">
 
-	body{
-		margin: 0px;
-		padding: 0px;
-	}
+    body{
+        margin: 0px;
+        padding: 0px;
+    }
 
     .top{
         width:100%;
@@ -25,21 +25,21 @@
 	.nav{
         width: 1200px;
         display: flex;
-		margin-right:auto;
-		margin-left:auto;
-		background-color:white;
+        margin-right:auto;
+        margin-left:auto;
+        background-color:white;
         justify-content: space-between;
         align-items: center; 
-		}
+	}
 
-	.left-nav{
+    .left-nav{
         font-family: Noto Sans;
         font-size: 30px;
         font-style: normal;
         font-weight: 700;
         line-height: 34px;
         letter-spacing: 0em;
-		}
+	}
 
     .right-nav{
         font-size:16px;
@@ -55,8 +55,8 @@
         text-decoration: underline;
     }    
 
-	.top_area{
-        background-image: url('../static/img/img01.png'), linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);;
+    .top_area{
+        background-image: url('../static/img/img01.png'), linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
         background-position: bottom right;
         background-size: contain, cover;
         background-repeat: no-repeat;
@@ -65,7 +65,7 @@
         align-items: center; 
         width:100%;
         height: 320px;
-		}
+	}
 
     .top_info{
         width:1200px;
@@ -117,25 +117,25 @@
 		margin-right:auto;
 		margin-left:auto;
 		margin-top:15px;
-		}
+	}
 
 	.box{
-		border:solid rgb(230, 216, 216);
-		width:22%;
-		border-radius: 6px;
-		margin:15px;
-		display:inline-block;
-		vertical-align:top;
-		text-align:center;
-		}
+        border:solid rgb(230, 216, 216);
+        width:22%;
+        border-radius: 6px;
+        margin:15px;
+        display:inline-block;
+        vertical-align:top;
+        text-align:center;
+	}
 
 	.title{
-		text-align:left;
-		padding:5px;
-		font-size:15px;
+        text-align:left;
+        padding:5px;
+        font-size:15px;
         font-weight: bold;
         color: #757575;
-		}
+	}
 
     .title2{
         display: flex;
@@ -146,7 +146,7 @@
     }
 
 	img{
-		border-radius: 6px;
+        border-radius: 6px;
         width:100%;
         object-position: 50% 50%;
         object-fit: cover;
@@ -162,7 +162,6 @@
         color:white;
         background-color:gray;
         height: 104px;
-
     }
 
 /* 視窗 1200 以下 */
@@ -326,10 +325,14 @@ window.addEventListener("scroll",()=>{
 
     console.log(scrolled, scrollable, document.documentElement.scrollHeight, window.innerHeight);
 
-    // Math.ceil() 取一個大於等於指定數字的最小整數。
-    if (Math.ceil(scrolled/2) === Math.ceil(scrollable/2)){
+    // Math.floor() 捨棄小數
+    if (Math.floor(scrolled) === Math.ceil(scrollable)){
         if (page != null){
-            addElement();
+            // 加入一點延遲
+            window.setTimeout(function(){
+                addElement();
+            }, 200);
+            
         }
        
     }
