@@ -1,0 +1,395 @@
+<html>
+
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximun-scale=1" />
+<title>台北一日遊 - 首頁</title>
+
+<style type="text/css">
+
+    body{
+        margin: 0px;
+        padding: 0px;
+    }
+
+    .top{
+        width:100%;
+        position: fixed; /* 區塊固定位置 */
+        display: flex;
+        justify-content: center;
+        align-items: center; 
+        background-color:white;
+        height: 54px;
+    }
+
+	.nav{
+        width: 1200px;
+        display: flex;
+        margin-right:auto;
+        margin-left:auto;
+        background-color:white;
+        justify-content: space-between;
+        align-items: center; 
+	}
+
+    .left-nav{
+        font-family: Noto Sans;
+        font-size: 30px;
+        font-style: normal;
+        font-weight: 700;
+        line-height: 34px;
+        letter-spacing: 0em;
+	}
+
+    .right-nav{
+        font-size:16px;
+        color: #666666;
+    }
+
+    a{
+        color: #666666; 
+        text-decoration: none;
+    }
+
+    a:hover{
+        text-decoration: underline;
+    }    
+
+    .top_area{
+        background-image: url('../static/img/img01.png'), linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
+        background-position: bottom right;
+        background-size: contain, cover;
+        background-repeat: no-repeat;
+        display: flex;
+        justify-content: left;
+        align-items: center; 
+        width:100%;
+        height: 320px;
+	}
+
+    .top_info{
+        width:1200px;
+        margin-right:auto;
+		margin-left:auto;
+    }
+
+    h1{
+        color: white;
+    }
+
+    .slogan{
+        color: white;
+    }
+
+    form{
+        display: flex;
+    }
+    
+    .input_search{
+        width:400px;
+        height:46px;
+        padding:10px;
+        font-size: medium;
+        border-radius: 5px 0 0 5px;
+        border: none;
+    }
+
+    .input_search:focus {
+        outline: none; /* input onfocus 裡面的線 */
+    }
+
+    .btn_search{
+        width:60px;
+        height:46px;
+        background-image: url('../static/img/search.png');
+        background-size: 30px 30px;
+        background-repeat: no-repeat;
+        background-position: center;
+        background-color:#448899;
+        border-radius: 0 5px 5px 0;
+        border: none;
+        cursor: pointer;
+    }
+
+	.content{
+		/* background-color:lightgreen; */
+		width:1200px;
+		margin-right:auto;
+		margin-left:auto;
+		margin-top:15px;
+	}
+
+	.box{
+        border:solid rgb(230, 216, 216);
+        width:22%;
+        border-radius: 6px;
+        margin:15px;
+        display:inline-block;
+        vertical-align:top;
+        text-align:center;
+	}
+
+	.title{
+        text-align:left;
+        padding:5px;
+        font-size:15px;
+        font-weight: bold;
+        color: #757575;
+	}
+
+    .title2{
+        display: flex;
+        padding:5px;
+        font-size:15px;
+        color: #757575;
+        justify-content: space-between;
+    }
+
+    .error{
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 20px;
+        font-size: 20px;
+        font-weight: bold;
+    }
+
+	img{
+        border-radius: 6px;
+        width:100%;
+        object-position: 50% 50%;
+        object-fit: cover;
+        overflow: hidden;
+        height: 200px;
+	}
+
+    .footer{
+        width:100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color:white;
+        background-color:gray;
+        height: 104px;
+    }
+
+/* 視窗 1200 以下 */
+	@media screen and (max-width:1200px){
+
+		.content{
+			/* background-color:yellow; */
+			width:90%;
+            text-align: center;
+			}
+
+		.box{
+			width:45%;
+
+		}
+
+        .nav{
+            width: 90%;
+		}
+
+        .top_info{
+            width: 90%;
+        }
+	}
+
+	/* 視窗 600 以下 */
+	@media screen and (max-width:600px){
+
+        .top_area{
+            background-size: 80%, cover;
+		}
+
+        .box{
+			width:90%;
+		}
+
+	}
+
+
+
+</style>
+
+<script>
+    
+
+    // 把頁數及監控 fetch 運作的變數 ing 設定為全域變數
+    page = 0;
+    ing = false;
+
+    function search(){
+            page = 0;
+            document.getElementById('content').innerHTML = '';
+            addElement();
+            return false;
+    }
+
+    // button type 是 submit 時用的方式
+    // function search(){
+    //     document.getElementById('search').onsubmit = function() {
+    //         page = 0;
+    //         document.getElementById('content').innerHTML = '';
+    //         addElement();
+    //         event.preventDefault();
+    //         }
+    // }
+
+    // 創建元素
+    function addElement(){
+        //如果是真，運作中，直接跳出函式，不進行 fetch 動作
+        if (ing){
+            return;
+        }
+
+        ing = true;
+
+        let content = document.querySelector("#content"); 
+        let keyword = document.getElementById("keyword").value;
+        let src = ""
+        if (keyword == "") {
+            src = "api/attractions?page="+String(page);
+        }
+        else {
+            src = "api/attractions?page="+String(page)+"&keyword="+String(keyword);
+        }
+        console.log(keyword, src);
+        fetch(src) 
+            .then(function(resp) {
+                //console.log(resp);
+                    resp.json().then(function(json) {
+                    // console.log(json);
+                        //注意這個關鍵變數 page，吃的是 json 內的下一頁，只會有頁數或者 null，null 代表沒有下一頁
+                        page = json.nextPage;
+                        err = json.error;
+                        message = json.message;
+                        ing = false;
+                        
+                        if (err) {
+                            let newDIV = document.createElement("div");
+                            newDIV.setAttribute("class","error"); 
+                            let title = document.createTextNode(message);
+                            content.appendChild(newDIV); 
+                            newDIV.appendChild(title); 
+                            return;
+                        }
+
+                        let data = json.data; 
+                        // console.log(data[0]["images"][0]);
+                        data.forEach(function(item) {
+                            
+                            // 來看資料是否都有出來
+                            // console.log(item.images[0], item.name, item.mrt, item.category);
+
+                            let newDIV = document.createElement("div");
+                            newDIV.setAttribute("class","box"); 
+                            content.appendChild(newDIV); 
+    
+                            let img = document.createElement("img"); 
+                            img.setAttribute("src", item.images[0]); 
+                            newDIV.appendChild(img);
+    
+                            let DIVtitle = document.createElement("div"); 
+                            DIVtitle.setAttribute("class","title"); 
+                            let title = document.createTextNode(item.name);
+                            newDIV.appendChild(DIVtitle); 
+                            DIVtitle.appendChild(title); 
+
+                            let DIVtitle2 = document.createElement("div"); 
+                            DIVtitle2.setAttribute("class","title2"); 
+                            let title2 = document.createTextNode(item.mrt);
+                            let title3 = document.createTextNode(item.category);
+                            newDIV.appendChild(DIVtitle2); 
+
+                            let span = document.createElement("span"); 
+                            DIVtitle2.appendChild(span); 
+                            span.appendChild(title2); 
+
+                            let span2 = document.createElement("span"); 
+                            DIVtitle2.appendChild(span2); 
+                            span2.appendChild(title3); 
+
+                        });
+                    });
+            }).catch(err => {
+                console.log(err);
+
+            });
+    }
+    
+
+</script>
+
+</head>
+
+<body onload="addElement()">
+
+<div class="top">
+    <div class="nav">
+        <div class="left-nav"><a href="/">台北一日遊</a></div>
+
+        <div class="right-nav">
+        <a href="#">預定行程</a><span>　</span>
+        <a href="#">登入 / 註冊</a>
+        </div>
+    </div>
+</div>
+
+<div class="top_area">
+    <div class="top_info">
+        <h1>輕鬆享受台北一日悠閒</h1>
+        <p class="slogan">探索每個角落，體驗程式的深度旅遊行程</p>
+        <form id="search" onsubmit="return search()">
+            <input class="input_search" type="text" placeholder="輸入景點名稱查詢" id="keyword">
+            <button class="btn_search" type="button" id="btn" onclick="search()"></button>
+        </form>
+    </div>
+</div>
+
+
+<div class="content" id="content">
+
+</div>
+
+<div class="footer"><p>COPYRIGHT © 2021 台北一日遊</p></div>
+
+</body>
+
+
+<script>
+
+// 監測卷軸事件
+window.addEventListener("scroll",()=>{
+
+    // document.documentElement.scrollHeight 整個網頁內容的長度
+    // window.innerHeight 可視範圍
+    const scrollable = document.documentElement.scrollHeight - window.innerHeight;
+
+    // 卷軸捲動時，window.scrollY 會一直變化，到網頁底部的時候會是一個固定的數字，越往下拉越大
+    const scrolled = window.scrollY;
+
+    console.log(scrolled, scrollable, document.documentElement.scrollHeight, window.innerHeight);
+
+    // Math.floor() 捨棄小數
+    if (Math.ceil(scrolled) >= (scrollable-1)){
+        console.log(Number.isFinite(page))
+        if (Number.isFinite(page)){
+            // 加入一點延遲
+            window.setTimeout(function(){
+                addElement();
+            }, 200);
+            
+        }
+       
+    }
+
+});
+
+</script>
+
+
+
+
+</html>
