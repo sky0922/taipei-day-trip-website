@@ -219,12 +219,15 @@
     // 把頁數及監控 fetch 運作的變數 ing 設定為全域變數
     page = 0;
     ing = false;
+    searching = false;
 
     function search(){
             page = 0;
+            searching = true;
             document.getElementById('content').innerHTML = '';
             addElement();
             return false;
+            
     }
 
     // button type 是 submit 時用的方式
@@ -263,9 +266,10 @@
                     // console.log(json);
                         //注意這個關鍵變數 page，吃的是 json 內的下一頁，只會有頁數或者 null，null 代表沒有下一頁
                         page = json.nextPage;
-                        err = json.error;
-                        message = json.message;
+                        let err = json.error;
+                        let message = json.message;
                         ing = false;
+                        searching = false;
                         
                         if (err) {
                             let newDIV = document.createElement("div");
@@ -375,7 +379,7 @@ window.addEventListener("scroll",()=>{
     // Math.floor() 捨棄小數
     if (Math.ceil(scrolled) >= (scrollable-1)){
         console.log(Number.isFinite(page))
-        if (Number.isFinite(page)){
+        if (Number.isFinite(page) && !searching){
             // 加入一點延遲
             window.setTimeout(function(){
                 addElement();
