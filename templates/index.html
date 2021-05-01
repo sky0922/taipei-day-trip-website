@@ -46,7 +46,7 @@
         color: #666666;
     }
 
-    a{
+    .nav a{
         color: #666666; 
         text-decoration: none;
     }
@@ -70,10 +70,10 @@
     .top_info{
         width:1200px;
         margin-right:auto;
-		margin-left:auto;
+        margin-left:auto;
     }
 
-    h1{
+    .top_info h1{
         color: white;
     }
 
@@ -129,6 +129,10 @@
         text-align:center;
 	}
 
+    .box:hover{
+        border:solid rgb(179, 135, 135);
+    } 
+
 	.title{
         text-align:left;
         padding:5px;
@@ -154,7 +158,7 @@
         font-weight: bold;
     }
 
-	img{
+	.box img{
         border-radius: 6px;
         width:100%;
         object-position: 50% 50%;
@@ -174,17 +178,16 @@
     }
 
 /* 視窗 1200 以下 */
-	@media screen and (max-width:1200px){
+    @media screen and (max-width:1200px){
 
-		.content{
-			/* background-color:yellow; */
-			width:90%;
+        .content{
+            /* background-color:yellow; */
+            width:90%;
             text-align: center;
-			}
+		}
 
 		.box{
 			width:45%;
-
 		}
 
         .nav{
@@ -224,7 +227,7 @@
             page = 0;
             document.getElementById('content').innerHTML = '';
             addElement();
-            return false;
+            return false; //作用是讓 form 表單不被送出
     }
 
     // button type 是 submit 時用的方式
@@ -237,6 +240,8 @@
     //         }
     // }
 
+
+
     // 創建元素
     function addElement(){
         //如果是真，運作中，直接跳出函式，不進行 fetch 動作
@@ -248,14 +253,14 @@
 
         let content = document.querySelector("#content"); 
         let keyword = document.getElementById("keyword").value;
-        let src = ""
+        let src = "";
         if (keyword == "") {
             src = "api/attractions?page="+String(page);
         }
         else {
             src = "api/attractions?page="+String(page)+"&keyword="+String(keyword);
         }
-        console.log(keyword, src);
+        // console.log(keyword, src);
         fetch(src) 
             .then(function(resp) {
                 //console.log(resp);
@@ -263,9 +268,14 @@
                     // console.log(json);
                         //注意這個關鍵變數 page，吃的是 json 內的下一頁，只會有頁數或者 null，null 代表沒有下一頁
                         page = json.nextPage;
-                        err = json.error;
-                        message = json.message;
+                        let err = json.error;
+                        let message = json.message;
                         ing = false;
+
+                        if (json.status == 400){
+                            console.log(json);
+                            return;
+                        }
                         
                         if (err) {
                             let newDIV = document.createElement("div");
@@ -370,11 +380,11 @@ window.addEventListener("scroll",()=>{
     // 卷軸捲動時，window.scrollY 會一直變化，到網頁底部的時候會是一個固定的數字，越往下拉越大
     const scrolled = window.scrollY;
 
-    console.log(scrolled, scrollable, document.documentElement.scrollHeight, window.innerHeight);
+    // console.log(scrolled, scrollable, document.documentElement.scrollHeight, window.innerHeight);
 
-    // Math.floor() 捨棄小數
+    // Math.floor() 捨棄小數，Math.ceil() 小數點無條件進位
     if (Math.ceil(scrolled) >= (scrollable-1)){
-        console.log(Number.isFinite(page))
+
         if (Number.isFinite(page)){
             // 加入一點延遲
             window.setTimeout(function(){
@@ -388,7 +398,6 @@ window.addEventListener("scroll",()=>{
 });
 
 </script>
-
 
 
 
