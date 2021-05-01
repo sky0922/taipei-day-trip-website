@@ -271,11 +271,6 @@
                         let err = json.error;
                         let message = json.message;
                         ing = false;
-
-                        if (json.status == 400){
-                            console.log(json);
-                            return;
-                        }
                         
                         if (err) {
                             let newDIV = document.createElement("div");
