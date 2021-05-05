@@ -1,0 +1,156 @@
+<html>
+
+<head>
+<meta charset="utf-8"></meta>
+<meta name="viewport" content="width=device-width, initial-scale=1, maximun-scale=1" />
+<link rel=stylesheet type="text/css" href= "{{ url_for('static', filename = 'css/attraction.css') }}">
+<title>台北一日遊 - 景點</title>
+
+
+<script>
+
+function attraction(){
+    let attraction_id = location.href.split("/").pop();
+    let src = "../api/attraction/"+attraction_id;
+    console.log(typeof(attraction_id), attraction_id, src);
+
+    fetch(src) 
+            .then(function(resp) {
+                //console.log(resp);
+                    resp.json().then(function(json) {
+                    console.log(json);
+                        let err = json.error;
+                        let message = json.message;
+                        
+                        if (err) {
+                            let newDIV = document.createElement("div");
+                            newDIV.setAttribute("class","error"); 
+                            let title = document.createTextNode(message);
+                            content.appendChild(newDIV); 
+                            newDIV.appendChild(title); 
+                            return;
+                        }
+
+                        let data = json.data; 
+                        console.log(data, data.name, data.images.length);
+
+                        for (i=0; i < data.images.length; i++){
+                            let pic = document.querySelector("#picture");
+                            let img = document.createElement("img"); 
+                            img.setAttribute("id", "img"+i); 
+                            img.setAttribute("src", data.images[i]); 
+                            pic.appendChild(img);
+                        }
+                        let name = document.querySelector("#name"); 
+                        let name_text = document.createTextNode(data.name);
+                        name.appendChild(name_text);
+
+                        let category_mrt = document.querySelector("#category_mrt"); 
+                        let category_text = document.createTextNode(data.category+" at "+data.mrt);
+                        category_mrt.appendChild(category_text);
+  
+                        let description = document.querySelector("#description"); 
+                        let description_text = document.createTextNode(data.description);
+                        description.appendChild(description_text);
+  
+                        let address = document.querySelector("#address"); 
+                        let address_text = document.createTextNode(data.address);
+                        address.appendChild(address_text);
+
+                        let transport = document.querySelector("#transport"); 
+                        let transport_text = document.createTextNode(data.transport);
+                        transport.appendChild(transport_text);
+
+                    });
+            }).catch(err => {
+                console.log(err);
+
+            });
+    } 
+    
+attraction();
+
+
+function showprice(time){
+    if (time == 1){
+        document.getElementById("price").innerHTML = "新台幣 2000 元";
+    }
+
+    if (time == 2){
+        document.getElementById("price").innerHTML = "新台幣 2500 元";
+    }
+}
+
+
+</script>
+
+</head>
+
+<body>
+
+<div class="top">
+    <div class="nav">
+        <div class="left-nav"><a href="/">台北一日遊</a></div>
+
+        <div class="right-nav">
+        <a href="#">預定行程</a><span>　</span>
+        <a href="#">登入 / 註冊</a>
+        </div>
+    </div>
+</div>
+
+    <div class="section">
+        <div class="picture" id="picture"></div>
+        <div class="profile">
+            <p id="name"></p>
+            <p id="category_mrt"></p>
+            <div class="booking">
+                <p class="text_bold">訂購導覽行程</p>
+                <spen>以此景點為中心的一日行程，帶你探索城市角落故事</spen><br />
+                <form>
+                    <div id="select_date">
+                      <label for="date" class="text_bold">選擇日期：</label>
+                      <input type="date" id="date" name="date" />
+                    </div>
+                    <p></p>
+                    <div id="select_time">
+                      <label for="" class="text_bold">選擇時間：</label>
+                      <label>
+                        <input type="radio" id="morning" name="time" onclick="showprice(1)" checked />
+                        <span>上半天</span>
+                      </label>
+                      <label>
+                        <input type="radio" id="afternoon" name="time" onclick="showprice(2)"/>
+                        <span>下半天</span>
+                      </label>
+                    </div>
+                    <p></p>
+                    <span class="text_bold">導覽費用：</span><span id="price">新台幣 2000 元</span><br />
+                    <button class="btn_booking">開始預定行程</button>
+                </form>
+
+
+            </div>
+        </div>
+    </div>
+
+    <hr>
+    <div class="content" id="content">
+        <div>
+        <p class="text_bold">景點簡介：</p><span id="description"></span>
+        <p class="text_bold">景點地址：</p><span id="address"></span>
+        <p class="text_bold">交通方式：</p><span id="transport"></span><br /><br />
+        </div>
+    </div>
+
+
+<div class="footer"><p>COPYRIGHT © 2021 台北一日遊</p></div>
+
+</body>
+
+
+
+
+
+
+</html>
