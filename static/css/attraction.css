@@ -136,6 +136,9 @@ span{
     font-weight: bold;
 }
 
+hr {
+    margin-top: 20px;
+}
 
 .footer{
     width:100%;
