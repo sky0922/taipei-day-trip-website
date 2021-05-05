@@ -1,0 +1,207 @@
+body{
+    margin: 0px;
+    padding: 0px;
+}
+
+.top{
+    width:100%;
+    position: fixed; /* 區塊固定位置 */
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-color:white;
+    height: 54px;
+}
+
+.nav{
+    width: 1200px;
+    display: flex;
+    background-color:white;
+    justify-content: space-between;
+    align-items: center; 
+}
+
+.left-nav{
+    font-family: Noto Sans;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 34px;
+    letter-spacing: 0em;
+}
+
+.right-nav{
+    font-size:16px;
+    color: #666666;
+}
+
+a{
+    color: #666666; 
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}    
+
+.top_area{
+    background-image: url('../img/img01.png'), linear-gradient(135deg, #AADDEE 0%, #66AABB 100%);
+    background-position: bottom right;
+    background-size: contain, cover;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: center; 
+    width:100%;
+    height: 320px;
+}
+
+.top_info{
+    width:1200px;
+    margin-right:auto;
+    margin-left:auto;
+}
+
+h1{
+    color: white;
+}
+
+.slogan{
+    color: white;
+}
+
+form{
+    display: flex;
+}
+
+.input_search{
+    width:400px;
+    height:46px;
+    padding:10px;
+    font-size: medium;
+    border-radius: 5px 0 0 5px;
+    border: none;
+}
+
+.input_search:focus {
+    outline: none; /* input onfocus 裡面的線 */
+}
+
+.btn_search{
+    width:60px;
+    height:46px;
+    background-image: url('../img/search.png');
+    background-size: 30px 30px;
+    background-repeat: no-repeat;
+    background-position: center;
+    background-color:#448899;
+    border-radius: 0 5px 5px 0;
+    border: none;
+    cursor: pointer;
+}
+
+.content{
+    /* background-color:lightgreen; */
+    width:1200px;
+    margin-right:auto;
+    margin-left:auto;
+    margin-top:15px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.box{
+    border:solid rgb(230, 216, 216);
+    width:22%;
+    border-radius: 6px;
+    margin:15px;
+    text-align:center;
+}
+
+.box:hover{
+    border:solid rgb(179, 135, 135);
+    box-shadow: 5px 5px 5px 0px #d4ced8;
+} 
+
+.title{
+    text-align:left;
+    padding:5px;
+    font-size:15px;
+    font-weight: bold;
+    color: #757575;
+}
+
+.title2{
+    display: flex;
+    padding:5px;
+    font-size:15px;
+    color: #757575;
+    justify-content: space-between;
+}
+
+.error{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+.box img{
+    border-radius: 6px;
+    width:100%;
+    object-position: 50% 50%;
+    object-fit: cover;
+    overflow: hidden;
+    height: 200px;
+}
+
+
+.footer{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+    background-color:gray;
+    height: 104px;
+}
+
+/* 視窗 1200 以下 */
+@media screen and (max-width:1200px){
+
+    .content{
+        /* background-color:yellow; */
+        width:90%;
+        }
+
+    .box{
+        width:45%;
+
+    }
+
+    .nav{
+        width: 90%;
+    }
+
+    .top_info{
+        width: 90%;
+    }
+}
+
+/* 視窗 750 以下 */
+@media screen and (max-width:750px){
+
+    .top_area{
+        background-size: 80%, cover;
+    }
+
+    .content{
+        justify-content:space-around;
+        }
+
+    .box{
+        width:90%;
+    }
+
+}

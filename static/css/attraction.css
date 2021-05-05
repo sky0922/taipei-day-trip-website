@@ -1,0 +1,202 @@
+body{
+    margin: 0px;
+    padding: 0px;
+    color: #666666; 
+}
+
+.top{
+    width:100%;
+    position: fixed; /* 區塊固定位置 */
+    display: flex;
+    justify-content: center;
+    align-items: center; 
+    background-color:white;
+    height: 54px;
+}
+
+.nav{
+    width: 1200px;
+    display: flex;
+    background-color:white;
+    justify-content: space-between;
+    align-items: center; 
+}
+
+.left-nav{
+    font-family: Noto Sans;
+    font-size: 30px;
+    font-style: normal;
+    font-weight: 700;
+    line-height: 34px;
+    letter-spacing: 0em;
+}
+
+.right-nav{
+    font-size:16px;
+    color: #666666;
+}
+
+a{
+    color: #666666; 
+    text-decoration: none;
+}
+
+a:hover{
+    text-decoration: underline;
+}    
+
+.section{
+    width: 1200px;
+    display: flex;
+    margin: auto;
+    justify-content: space-between;
+    padding-top: 60px;
+    flex-wrap: wrap; 
+}
+
+.picture{
+    width: 540px;
+    height: 400px;
+    display: flex;
+}
+
+.picture img{
+    object-position: 50% 50%;
+    object-fit: cover;
+    overflow: hidden;
+}
+
+
+.profile{
+    width: 600px;
+    height: 400px;
+}
+
+.booking{
+    width: 100%;
+    background-color:#E8E8E8;
+    border-radius:5px;
+    padding-left: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+#select_date{
+    margin-bottom: 10px;
+    margin-top: 10px;
+}
+
+.btn_booking{
+    width: 154px;
+    height: 36px;
+    color:#FFF;
+    font-weight: bold;
+    background-color: 448899;
+    padding: auto;
+    border-radius:10px;
+    font-size: 20px;
+    border: none;
+    margin-top: 15px;
+}
+
+.btn_booking:hover{
+    cursor: pointer;
+    box-shadow: 5px 5px 5px 0px #89868b;
+}
+
+.content{
+    /* background-color:lightgreen; */
+    width:1200px;
+    margin-right:auto;
+    margin-left:auto;
+    display: flex;
+    flex-wrap: wrap;
+    padding-top: 10px;
+}
+
+.text_bold{
+    font-weight: 700;
+    font-size: 16px;
+}
+
+#name{
+    font-weight:900;
+    font-size: 22px;
+}
+
+span{
+    line-height: 1.5em;
+}
+
+.error{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+    font-size: 20px;
+    font-weight: bold;
+}
+
+
+.footer{
+    width:100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color:white;
+    background-color:gray;
+    height: 104px;
+}
+
+@media screen and (max-width:1200px){
+
+    .section{
+        width:90%;
+    }
+
+    .picture{
+        width: 45%;
+    }
+
+    .booking{
+        width: 92%;
+    }
+
+    .profile{
+        width: 50%;
+    }
+
+    .content{
+        width:90%;
+        }
+
+    .nav{
+        width: 90%;
+    }
+
+}
+
+@media screen and (max-width:850px){
+
+    .section{
+        justify-content: center;
+    }
+
+    .picture{
+        width: 95%;
+        height:350px;
+    }
+
+    .profile{
+        width: 95%;
+        height:390px;
+        margin-top: 10px;
+        margin-bottom: 10px;
+    }
+
+    .content{
+        width:80%;
+        }
+
+
+}
