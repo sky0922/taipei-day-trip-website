@@ -11,6 +11,9 @@ newDatabaseName = "tpetravel"
 app=Flask(__name__)
 app.config["JSON_AS_ASCII"]=False
 app.config["TEMPLATES_AUTO_RELOAD"]=True
+app.config["JSON_SORT_KEYS"]=False # False, 讓 json 不自動以字母順序排序
+static_folder="static", #靜態檔案資料夾名稱
+static_url_path="/static" #靜態檔案對應網址路徑
 
 def connect_mysql():  
     global connect, cursor 
@@ -76,14 +79,13 @@ def api_attraction(attractionId):
         		}
 			return jsonify(data)
 		else:
-			return jsonify({"error": True, "message": "錯誤：該景點編號沒有資料"})
+			return jsonify({"error": True, "message": "錯誤：該景點編號沒有資料"}), 400
 	else:
-		return jsonify({"error": True, "message": "錯誤：資料型態不正確"})
+		return jsonify({"error": True, "message": "錯誤：資料型態不正確"}), 400
+
+
 
 # API 關鍵字 抓景點資料 及 分頁效果
-
-
-
 @app.route("/api/attractions")
 def attractions():
 
@@ -176,7 +178,7 @@ def attractions():
 			return jsonify({"nextPage": nextpage, "data": data})
 
 	else:
-		return jsonify({"error": True, "message": "錯誤：頁數資料型態不正確"})
+		return jsonify({"error": True, "message": "錯誤：頁數資料型態不正確"}), 400
 
 
 @app.errorhandler(404)
@@ -188,4 +190,4 @@ def error404(error):
     return jsonify({"error": True, "message": "網站異常中..."})
 
 
-app.run(host="0.0.0.0", port=3000, debug=True)
+app.run(host="127.0.0.1", port=3000, debug=True)
