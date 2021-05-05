@@ -87,7 +87,7 @@ a:hover{
 }
 
 .btn_booking{
-    width: 154px;
+    width: 165px;
     height: 36px;
     color:#FFF;
     font-weight: bold;
@@ -101,7 +101,6 @@ a:hover{
 
 .btn_booking:hover{
     cursor: pointer;
-    box-shadow: 5px 5px 5px 0px #89868b;
 }
 
 .content{
